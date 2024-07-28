@@ -20,7 +20,7 @@ clients = pd.DataFrame(columns=["Chat_id", "State", "Is_member", "Ready", "Name"
 # clients.loc[ len(clients.index) ] = [0, Sta"test", None, None]
 
 
-API_TOKEN = '7030787887:AAGCfXK8RJ2gFOD7uoTPkhs1Jd1z4AgLmYg'
+API_TOKEN = ''
 bot = TeleBot(API_TOKEN, parse_mode=None) # You can set parse_mode by default. HTML or MARKDOWN
 
 welcome_txt = "Привет, я телеграм бот для игры Тайный Санта. Познакомимся?"

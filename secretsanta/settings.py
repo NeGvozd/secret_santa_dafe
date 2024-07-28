@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "jazzmin",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -68,6 +69,31 @@ TEMPLATES = [
     },
 ]
 
+JAZZMIN_SETTINGS = {
+    "site_title":"Тайный Санта - админка",
+    "site_header": "Тайный Санта",
+    "site_brand": "Тайный Санта",
+    "site_logo": None,
+    "copyright": "Культмасс ФАЛТ МФТИ",
+    "search_model": "secret_santa.User",
+    "topmenu_links": [
+        {"name": "Группа Vk", "url": "https://vk.com/secret_santa_falt"},
+
+        {"name": "Помощь", "url": "https://vk.com/gvozdkov"},
+    ],
+    "order_with_respect_to": ["secret_santa", "secret_santa.User", "auth"],
+    "icons": {
+        "secret_santa.User": "fas fa-user",
+        "secret_santa.Maillist": "fas fa-comments",
+    },
+    "use_google_fonts_cdn": True,
+    "show_ui_builder" : False,
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "theme": "litera"
+}
+
 WSGI_APPLICATION = "secretsanta.wsgi.application"
 
 
@@ -104,9 +130,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "ru-ru"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Europe/Moscow"
 
 USE_I18N = True
 
@@ -117,6 +143,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = "static/"
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
