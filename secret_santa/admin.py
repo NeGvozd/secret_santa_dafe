@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from secret_santa.models import User, MailList
+from secret_santa.bot import send_message
 from django import forms
 
 class MailListInline(admin.TabularInline):
@@ -56,7 +57,7 @@ class MailListAdmin(admin.ModelAdmin):
 
     def send_mail(self, obj):
         return format_html(
-            '<a href="/admin/maillist/{0}/send" class="button">Отправить</a>&nbsp;',
+            '<a href="/admin/maillist/{0}/send" class="btn btn-outline-info">Отправить</a>&nbsp;',
             obj.id
         )
     
@@ -64,6 +65,8 @@ class MailListAdmin(admin.ModelAdmin):
         return obj.members.count()
     
     def send(self, request, queryset):
+        for mail in queryset:
+            send_message(mail.members.all(), mail.message, mail.image)
         self.message_user(request, "Рассылка отправлена")
 
     send.short_description = "Отправить рассылку"

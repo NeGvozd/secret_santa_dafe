@@ -1,6 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
-from secret_santa.models import User
+from secret_santa.models import User, MailList
 from secret_santa.admin import assign_givers
+from secret_santa.bot import send_message
 import json
 
 
@@ -40,4 +41,6 @@ def add_user(request):
 
 
 def send_mail(request, maillist_id):
+    mail = MailList.objects.get(id=maillist_id)
+    send_message(mail.members.all(), mail.message, mail.image)
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
