@@ -2,8 +2,9 @@ import vk_api, os
 from vk_api.longpoll import VkLongPoll, VkEventType
 from django.core.management import BaseCommand
 from .models import User
+from secret_santa.secrets import VK_TOKEN
 
-token = os.environ.get('VK_TOKEN')
+token = VK_TOKEN
 vk_session = vk_api.VkApi(token=token)
 longpoll = VkLongPoll(vk_session)
 vk = vk_session.get_api()

@@ -74,7 +74,9 @@ JAZZMIN_SETTINGS = {
     "site_title":"Тайный Санта - админка",
     "site_header": "Тайный Санта",
     "site_brand": "Тайный Санта",
-    "site_logo": None,
+    "site_logo": "img/icon.png",
+    "login_logo": "img/login_icon.png",
+    "welcome_sign": "Вход в админ-панель Тайного Санты",
     "copyright": "Культмасс ФАЛТ МФТИ",
     "search_model": "secret_santa.User",
     "topmenu_links": [

@@ -85,7 +85,6 @@ from django.db.models import (Case, ExpressionWrapper, F, IntegerField, Sum,
 from django.db.models.functions import Abs
 from django.db.models.functions.comparison import Coalesce
 from django.http import HttpResponse
-
 from secret_santa.models import User
 
 
