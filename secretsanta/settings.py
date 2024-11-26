@@ -96,7 +96,7 @@ JAZZMIN_SETTINGS = {
     },
     "custom_css": "css/styles.css",
     "use_google_fonts_cdn": True,
-    "show_ui_builder" : True,
+    "show_ui_builder" : False,
 }
 
 JAZZMIN_UI_TWEAKS = {
@@ -197,3 +197,10 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Europe/Moscow'
+
+CELERY_BEAT_SCHEDULE = {
+    'send-scheduled-messages-every-minute': {
+        'task': 'notifications.tasks.send_scheduled_messages',
+        'schedule': 60.0,
+    },
+}
