@@ -9,6 +9,12 @@ vk_session = vk_api.VkApi(token=token)
 longpoll = VkLongPoll(vk_session)
 vk = vk_session.get_api()
 
+def value_validation(field, value):
+        if field == 'year' and (value < 1 or value > 6):
+            raise ValueError
+        if field == 'room' and (value < 1 or value > 167):
+            raise ValueError
+
 
 class Command(BaseCommand):
     help = 'Запуск бота'
@@ -45,7 +51,9 @@ class Command(BaseCommand):
 
             if field == 'year' or field == 'room':
                 try:
-                    user_data[user_id]['data'][field] = int(text)
+                    value = int(text)
+                    value_validation(field, value)
+                    user_data[user_id]['data'][field] = value
                 except ValueError:
                     vk.messages.send(user_id=user_id, message="Введи корректное число", random_id=0)
                     return
