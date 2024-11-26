@@ -27,27 +27,36 @@ class Command(BaseCommand):
         text = event.text.strip()
 
         steps = [
-            ("Напиши свои имя и фамилию", 'start'),
-            ("Номер курса (цифра)", 'name'),
-            ("Номер комнаты в общежитии", 'year'),
-            ("Пожелания к подарку", 'room'),
-            ("Проверяем данные", 'wishes'),
+            ("Привет! Для участвия в Тайном Санте пройди, пожалуйста, небольшую регистрацию: напиши свои имя и фамилию", 'start'),
+            ("Номер курса (цифрой)", 'name'),
+            ("Номер комнаты в общежитии (чтобы мы знали, куда в случае чего передать подарок)", 'year'),
+            ("Пожелания к подарку (рекомендую писать как можно конкретнее)", 'room'),
+            ("Проверяем данные...", 'wishes'),
         ]
 
         if user_id not in user_data:
             user_data[user_id] = {'step': 0, 'data': {}}
 
         current_step = user_data[user_id]['step']        
-        print(user_id, current_step, event.text)
+        # print(user_id, current_step, event.text)
 
         if current_step < len(steps):
             message, field = steps[current_step]
-            if current_step > 0:
-                user_data[user_id]['data'][field] = int(text) if field == 'year'\
-                                                                or field == 'room' else text
+
+            if field == 'year' or field == 'room':
+                try:
+                    user_data[user_id]['data'][field] = int(text)
+                except ValueError:
+                    vk.messages.send(user_id=user_id, message="Введи корректное число", random_id=0)
+                    return
+            
+            elif current_step > 0:
+                user_data[user_id]['data'][field] = text
+
             vk.messages.send(user_id=user_id, message=message, random_id=0)
             current_step += 1
             user_data[user_id]['step'] = current_step
+
         if current_step >= len(steps):
             data = user_data[user_id]['data']
             User.objects.create(
@@ -57,7 +66,7 @@ class Command(BaseCommand):
                 room=data['room'],
                 wishes=data['wishes'],
             )
-            vk.messages.send(user_id=user_id, message="Регистрация завершена!", random_id=0)
+            vk.messages.send(user_id=user_id, message="Регистрация завершена!) Осталось дождаться рассылки с человеком, кому будешь дарить подарок) (Ориентировочно 7-го декабря)", random_id=0)
             del user_data[user_id]
 
 
