@@ -84,12 +84,26 @@ user_data = {}
 def send_message(users_set, message, image=None):
     vk_session = vk_api.VkApi(token=token)
     vk = vk_session.get_api()
+
+    users_set = users_set.select_related('giver_to').values(
+        'vk_id',
+        'giver_to__name',
+        'giver_to__year',
+        'giver_to__wishes',
+    )
+
     for user in users_set:
         if image:
             upload = vk_api.VkUpload(vk_session)
             photo = upload.photo_messages(photos=image.path)[0]
             attachemt = f'photo{photo["owner_id"]}_{photo["id"]}'
-            vk.messages.send(user_id=user.vk_id, message=message, attachment=attachemt, random_id=0)
+            vk.messages.send(user_id=user['vk_id'], message=message, attachment=attachemt, random_id=0)
         else:
-            vk.messages.send(user_id=user.vk_id, message=message, random_id=0)
+            # рассылка с данными людей приходит только без картинок. Код очень плохой, надо переписать 
+            try:
+                personalized_message = message.format(user['giver_to__name'], user['giver_to__year'], user['giver_to__wishes'])
+            except KeyError:
+                personalized_message = message
+                
+            vk.messages.send(user_id=user['vk_id'], message=personalized_message, random_id=0)
     
