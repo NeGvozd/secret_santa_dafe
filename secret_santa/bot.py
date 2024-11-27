@@ -56,7 +56,7 @@ class Command(BaseCommand):
                     user_data[user_id]['data'][field] = value
                 except ValueError:
                     vk.messages.send(user_id=user_id, message="Введи корректное число) \n \
-                        Номера курсов: 1-6 (если аспирантура или выпускник - пиши 6 :))\т \
+                        Номера курсов: 1-6 (если аспирантура или выпускник - пиши 6 :))\n \
                         Если не живешь в общежитии ФАЛТа, то пиши комнату человека, через которого можно передать подарок", random_id=0)
                     return
             
