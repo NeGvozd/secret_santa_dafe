@@ -33,7 +33,7 @@ class Command(BaseCommand):
         text = event.text.strip()
 
         steps = [
-            ("Привет! Для участия в Тайном Санте пройди, пожалуйста, небольшую регистрацию: напиши свои имя и фамилию", 'start'),
+            ("Привет! Для участия в Тайном Санте пройди, пожалуйста, небольшую регистрацию: \n напиши свои имя и фамилию", 'start'),
             ("Теперь номер курса (цифрой)", 'name'),
             ("Номер комнаты в общежитии (чтобы мы знали, куда в случае чего передать подарок)", 'year'),
             ("Пожелания к подарку (рекомендую писать как можно конкретнее)", 'room'),
@@ -55,7 +55,9 @@ class Command(BaseCommand):
                     value_validation(field, value)
                     user_data[user_id]['data'][field] = value
                 except ValueError:
-                    vk.messages.send(user_id=user_id, message="Введи корректное число", random_id=0)
+                    vk.messages.send(user_id=user_id, message="Введи корректное число) \n \
+                        Номера курсов: 1-6 (если аспирантура или выпускник - пиши 6 :))\т \
+                        Если не живешь в общежитии ФАЛТа, то пиши комнату человека, через которого можно передать подарок", random_id=0)
                     return
             
             elif current_step > 0:
@@ -74,7 +76,7 @@ class Command(BaseCommand):
                 room=data['room'],
                 wishes=data['wishes'],
             )
-            vk.messages.send(user_id=user_id, message="Регистрация завершена!) Осталось дождаться рассылки с человеком, кому будешь дарить подарок) (Ориентировочно 7-го декабря)", random_id=0)
+            vk.messages.send(user_id=user_id, message="Регистрация завершена!) Осталось дождаться рассылки с человеком, кому будешь дарить подарок)", random_id=0)
             del user_data[user_id]
 
 
