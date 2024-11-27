@@ -200,7 +200,7 @@ CELERY_TIMEZONE = 'Europe/Moscow'
 
 CELERY_BEAT_SCHEDULE = {
     'send-scheduled-messages-every-minute': {
-        'task': 'secret_santa.tasks.send_scheduled_messages',
+        'task': 'secret_santa.tasks.send_scheduled_mails',
         'schedule': 60.0,
     },
 }
