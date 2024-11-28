@@ -1,4 +1,4 @@
-import vk_api, os
+import vk_api, os, time
 from vk_api.longpoll import VkLongPoll, VkEventType
 from django.core.management import BaseCommand
 from .models import User
@@ -20,9 +20,20 @@ class Command(BaseCommand):
     help = 'Запуск бота'
 
     def handle(self, *args, **options):
+        while True:
+            try:
+                self.run_bot()
+            except Exception as e:
+                vk.messages.send(user_id='162745048', message="Ошибка подключения, попытка перезапуска", random_id=0)
+                time.sleep(5)
+        
+
+    def run_bot(self):
+        longpoll = VkLongPoll(vk_session)
         for event in longpoll.listen():
             if event.type == VkEventType.MESSAGE_NEW and event.to_me and event.text:
                 self.handle_message(event)
+
 
     def handle_message(self, event):
         user_id = event.user_id
@@ -33,7 +44,7 @@ class Command(BaseCommand):
         text = event.text.strip()
 
         steps = [
-            ("Привет! Для участия в Тайном Санте пройди, пожалуйста, небольшую регистрацию: \n напиши свои имя и фамилию", 'start'),
+            ("Привет! Для участия в Тайном Санте пройди, пожалуйста, небольшую регистрацию:\nнапиши свои имя и фамилию", 'start'),
             ("Теперь номер курса (цифрой)", 'name'),
             ("Номер комнаты в общежитии (чтобы мы знали, куда в случае чего передать подарок)", 'year'),
             ("Пожелания к подарку (рекомендую писать как можно конкретнее)", 'room'),
@@ -55,9 +66,7 @@ class Command(BaseCommand):
                     value_validation(field, value)
                     user_data[user_id]['data'][field] = value
                 except ValueError:
-                    vk.messages.send(user_id=user_id, message="Введи корректное число) \n \
-                        Номера курсов: 1-6 (если аспирантура или выпускник - пиши 6 :))\n \
-                        Если не живешь в общежитии ФАЛТа, то пиши комнату человека, через которого можно передать подарок", random_id=0)
+                    vk.messages.send(user_id=user_id, message="Введи корректное число)\nНомера курсов: 1-6 (если аспирантура или выпускник - пиши 6 :))\nЕсли не живешь в общежитии ФАЛТа, то пиши комнату человека, через которого можно передать подарок", random_id=0)
                     return
             
             elif current_step > 0:
