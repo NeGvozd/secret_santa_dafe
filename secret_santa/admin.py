@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from secret_santa.models import User, MailList
 from secret_santa.bot import send_message
 from django import forms
@@ -13,6 +14,9 @@ class MailListInline(admin.TabularInline):
 class UserAdmin(admin.ModelAdmin):
     actions = ['mailing', 'regenerate', 'reset']
     list_display = ['name', 'giver_to']
+    fields = ['telegram_id', 'vk_id', 'name', 'wishes',
+              'room', 'year', 'giver_to', 'has_giver']
+    search_fields = ['name']
     inlines = [
         MailListInline,
     ]
@@ -51,6 +55,9 @@ class MailListAdmin(admin.ModelAdmin):
     filter_horizontal = ['members']
     list_display = ['name', 'members_number', 
                     'is_scheduled', 'send_mail']
+    readonly_fields = ['preview']
+    fields = ['name', 'message', 'image', 'preview', 'members',
+              'scheduled_time']
     
     def is_scheduled(self, obj):
         return obj.scheduled_time if obj.is_scheduled else '-'
@@ -68,6 +75,9 @@ class MailListAdmin(admin.ModelAdmin):
         for mail in queryset:
             send_message(mail.members.all(), mail.message, mail.image)
         self.message_user(request, "Рассылка отправлена")
+
+    def preview(self, obj):
+        return mark_safe(f'<img src="{obj.image.url}" style="max-height:200px;">')
 
     send.short_description = "Отправить рассылку"
     send_mail.short_description = "Действия"

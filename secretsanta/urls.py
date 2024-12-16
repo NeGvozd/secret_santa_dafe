@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, re_path
+from django.conf.urls.static import static
+from django.conf import settings
 from secret_santa.views import add_user, delete_user, send_mail
 
 urlpatterns = [
@@ -25,3 +27,6 @@ urlpatterns = [
     path("delete_user/", delete_user),
     re_path(".*", admin.site.urls),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
