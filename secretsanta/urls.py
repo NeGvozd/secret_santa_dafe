@@ -25,8 +25,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("add_user/", add_user),
     path("delete_user/", delete_user),
-    re_path(".*", admin.site.urls),
-]
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('', admin.site.urls),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
